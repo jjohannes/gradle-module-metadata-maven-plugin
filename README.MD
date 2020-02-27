@@ -29,6 +29,7 @@ Add the plugin to your build:
     <plugin>
       <groupId>de.jjohannes</groupId>
       <artifactId>gradle-module-metadata-maven-plugin</artifactId>
+      <version>0.1.0</version>
       <executions>
         <execution>
           <goals>
@@ -85,12 +86,12 @@ If you add that to your POM, the `jackson-bom` will automatically be used by all
 
 A [capability](https://docs.gradle.org/current/userguide/dependency_capability_conflict.html) is defined by GAV coordinates just as a published component.
 This can be used to express that two different components implement the same thing (i.e. the same _capability_) and can thus not be used together.
-If Gradle 6+ detects multiple components with the same capability in a dependency graph it fails and allows the user to define the resolution (i.e. select one of the conflicting implementations).
-An example, which is described in detail in this [blog post](https://blog.gradle.org/addressing-logging-complexity-capabilities), is that `org.slf4j:slf4j-simple` and `ch.qos.logback:logback-classic` are both SLF4J bindings and only one can be used as runtime (so one should be chosen).
+If Gradle 6+ detects multiple components with the same capability in a dependency graph, it fails and allows the user to define the resolution (i.e. select one of the conflicting implementations).
+An example, which is described in detail in this [blog post](https://blog.gradle.org/addressing-logging-complexity-capabilities), is that `org.slf4j:slf4j-simple` and `ch.qos.logback:logback-classic` are both SLF4J bindings and only one can be used at runtime (so one should be chosen).
 
 Another use case is the relocation of a module to new coordinates.
 Then the never versions can define the old GAV coordinates as capability to indicate that both implement the same thing.
-(If a component does not define capabilities, like all modules published only with POM metadata, they automatically have a single capability corresponding to the component's GAV coordinates.)
+(If a component does not define capabilities, like all components published only with POM metadata, they automatically have a single capability corresponding to the component's GAV coordinates.)
 An example, from this [blog post](https://blog.gradle.org/guava), is `com.google.collections:google-collections` that was relocated to `com.google.guava:guava`
 
 ```
