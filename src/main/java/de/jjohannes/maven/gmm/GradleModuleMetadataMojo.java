@@ -54,6 +54,10 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
     private File outputDirectory;
 
     public void execute() throws MojoExecutionException {
+        if ("pom".equals(project.getPackaging())) {
+            // publishing GMM for platforms is currently not supported, the BOM can be used as platform directly
+            return;
+        }
         if (!outputDirectory.exists()) {
             //noinspection ResultOfMethodCallIgnored
             outputDirectory.mkdirs();

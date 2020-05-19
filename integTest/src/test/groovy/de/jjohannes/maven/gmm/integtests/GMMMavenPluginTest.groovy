@@ -43,7 +43,7 @@ class GMMMavenPluginTest extends Specification {
         gradleConsumerBuild = new File(gradleConsumer, 'build.gradle')
     }
 
-    def producerGMMPluginConfiguration(String pluginConfiguration) {
+    def producerGMMPluginConfiguration(String pluginConfiguration, String packaging = "jar") {
         mavenProducerBuild << """
             <project>
               <!-- do_not_remove: published-with-gradle-metadata -->
@@ -51,7 +51,7 @@ class GMMMavenPluginTest extends Specification {
               <groupId>de.jjohannes</groupId>
               <artifactId>gradle-module-metadata-maven-plugin-integration-test</artifactId>
               <version>1.0</version>
-              <packaging>jar</packaging>
+              <packaging>$packaging</packaging>
               <name>Test GMM</name>
 
               <dependencies>
@@ -130,6 +130,7 @@ class GMMMavenPluginTest extends Specification {
         """
 
         then:
+        moduleJsonGenerated()
         resolve() == ['gradle-module-metadata-maven-plugin-integration-test-1.0.jar', 'commons-io-2.6.jar']
     }
 
@@ -153,9 +154,18 @@ class GMMMavenPluginTest extends Specification {
         """
 
         then:
+        moduleJsonGenerated()
         resolve() == ['gradle-module-metadata-maven-plugin-integration-test-1.0.jar',
                       'jackson-core-2.10.2.jar',
                       'commons-io-2.6.jar']
+    }
+
+    def "does not generate GMM for BOMs"() {
+        when:
+        producerGMMPluginConfiguration "", "pom"
+
+        then:
+        !moduleJsonGenerated()
     }
 
     List<String> resolve() {
@@ -173,5 +183,9 @@ class GMMMavenPluginTest extends Specification {
 
     void installProducerLocally() {
         print "mvn clean install".execute(null, mavenProducerBuild.getParentFile()).text
+    }
+
+    private boolean moduleJsonGenerated() {
+        new File(mavenProducerBuild.parentFile, "target/publications/maven/module.json").exists()
     }
 }

@@ -21,6 +21,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.project.MavenProject;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
@@ -165,14 +166,12 @@ public class GradleModuleMetadataWriter {
     private static void writeArtifacts(MavenProject project, JsonWriter jsonWriter) throws IOException {
         jsonWriter.name("files");
         jsonWriter.beginArray();
-
-        writeArtifact(project.getArtifact(), jsonWriter);
-
+        writeArtifact(project.getArtifact().getFile(), jsonWriter);
         jsonWriter.endArray();
     }
 
-    private static void writeArtifact(Artifact artifact, JsonWriter jsonWriter) throws IOException {
-        String jar = artifact.getFile().getName();
+    private static void writeArtifact(File artifact, JsonWriter jsonWriter) throws IOException {
+        String jar = artifact.getName();
 
         jsonWriter.beginObject();
         jsonWriter.name("name");
@@ -181,21 +180,21 @@ public class GradleModuleMetadataWriter {
         jsonWriter.value(jar);
 
         jsonWriter.name("size");
-        jsonWriter.value(artifact.getFile().length());
+        jsonWriter.value(artifact.length());
         writeChecksums(artifact, jsonWriter);
 
         jsonWriter.endObject();
     }
 
-    private static void writeChecksums(Artifact artifact, JsonWriter jsonWriter) throws IOException {
+    private static void writeChecksums(File artifact, JsonWriter jsonWriter) throws IOException {
         jsonWriter.name("sha512");
-        jsonWriter.value(HashUtil.sha512(artifact.getFile()).asHexString());
+        jsonWriter.value(HashUtil.sha512(artifact).asHexString());
         jsonWriter.name("sha256");
-        jsonWriter.value(HashUtil.sha256(artifact.getFile()).asHexString());
+        jsonWriter.value(HashUtil.sha256(artifact).asHexString());
         jsonWriter.name("sha1");
-        jsonWriter.value(HashUtil.sha1(artifact.getFile()).asHexString());
+        jsonWriter.value(HashUtil.sha1(artifact).asHexString());
         jsonWriter.name("md5");
-        jsonWriter.value(HashUtil.createHash(artifact.getFile(), "md5").asHexString());
+        jsonWriter.value(HashUtil.createHash(artifact, "md5").asHexString());
     }
 
     private static void writeDependencies(Variant variant,
