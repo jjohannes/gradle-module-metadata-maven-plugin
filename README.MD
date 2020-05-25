@@ -29,7 +29,7 @@ Add the plugin to your build:
     <plugin>
       <groupId>de.jjohannes</groupId>
       <artifactId>gradle-module-metadata-maven-plugin</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
       <executions>
         <execution>
           <goals>
@@ -56,6 +56,8 @@ Add the plugin to your build:
   </plugins>
 </build>
 ```
+
+Note: You may apply the plugin in a parent POM to publish Gradle Module Metadata for all modules using that parent.
 
 ## Adding platform dependencies
 
