@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
 
@@ -58,6 +59,7 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
             // publishing GMM for platforms is currently not supported, the BOM can be used as platform directly
             return;
         }
+        assertMarkerCommentDefinedInPom();
         if (!outputDirectory.exists()) {
             //noinspection ResultOfMethodCallIgnored
             outputDirectory.mkdirs();
@@ -75,6 +77,19 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
                 null, "module", null, new DefaultArtifactHandler("module"));
         gmmArtifact.setFile(moduleFile);
         project.addAttachedArtifact(gmmArtifact);
+    }
+
+    private void assertMarkerCommentDefinedInPom() {
+        String marker = "<!-- do_not_remove: published-with-gradle-metadata -->";
+        File pomFile = project.getFile();
+        try {
+            if (Files.lines(pomFile.toPath()).noneMatch(line -> line.contains(marker))) {
+                System.out.println(marker);
+                throw new RuntimeException("Please add the Gradle Module Metadata marker '<!-- do_not_remove: published-with-gradle-metadata -->' to " + pomFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static String getMavenVersion() throws MojoExecutionException {
