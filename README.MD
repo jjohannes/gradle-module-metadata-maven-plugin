@@ -61,7 +61,7 @@ Note: You may apply the plugin in a parent POM to publish Gradle Module Metadata
 
 ## Adding platform dependencies
 
-In Gradle terminology, a _platform_ is a [component to control transitive dependencies](https://docs.gradle.org/current/userguide/platforms.htm).
+In Gradle terminology, a _platform_ is a [component to control transitive dependencies](https://docs.gradle.org/current/userguide/platforms.html).
 A Maven BOM can be used as a platform by declaring a dependency to it.
 Which means that, in contrast to Maven, another component can depend on a BOM instead of importing it.
 The advantage is that such a _platform dependency_ can be published in Gradle Module Metadata.
