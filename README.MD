@@ -15,7 +15,7 @@ Currently, this plugin supports the following features that cannot be expressed 
 
 ## Using the Plugin
 
-Add this line to the top of you `pom.xml` right in the beginning of the `<project>` tag:
+Add this line to the top of your `pom.xml` before the `<project>` tag:
 
 ```
 <!-- do_not_remove: published-with-gradle-metadata -->
