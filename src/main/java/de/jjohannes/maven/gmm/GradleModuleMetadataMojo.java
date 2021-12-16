@@ -80,12 +80,11 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
     }
 
     private void assertMarkerCommentDefinedInPom() {
-        String marker = "<!-- do_not_remove: published-with-gradle-metadata -->";
+        String marker = "do_not_remove: published-with-gradle-metadata";
         File pomFile = project.getFile();
         try {
             if (Files.lines(pomFile.toPath()).noneMatch(line -> line.contains(marker))) {
-                System.out.println(marker);
-                throw new RuntimeException("Please add the Gradle Module Metadata marker '<!-- do_not_remove: published-with-gradle-metadata -->' to " + pomFile.getAbsolutePath());
+                throw new RuntimeException("Please add the Gradle Module Metadata marker '<!-- " + marker + " -->' to " + pomFile.getAbsolutePath());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
