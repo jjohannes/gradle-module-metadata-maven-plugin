@@ -27,7 +27,7 @@
           "group": "com.google.guava",
           "module": "guava",
           "version": {
-            "requires": "28.2-jre"
+            "requires": "29.0-jre"
           }
         },
         {
@@ -79,14 +79,14 @@
           "group": "com.google.guava",
           "module": "guava",
           "version": {
-            "requires": "28.2-jre"
+            "requires": "29.0-jre"
           }
         },
         {
           "group": "commons-io",
           "module": "commons-io",
           "version": {
-            "requires": "2.6"
+            "requires": "2.7"
           }
         },
         {
