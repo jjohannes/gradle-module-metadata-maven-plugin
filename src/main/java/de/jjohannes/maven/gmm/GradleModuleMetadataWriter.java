@@ -166,24 +166,43 @@ public class GradleModuleMetadataWriter {
     private static void writeArtifacts(MavenProject project, JsonWriter jsonWriter) throws IOException {
         jsonWriter.name("files");
         jsonWriter.beginArray();
-        writeArtifact(project.getArtifact().getFile(), jsonWriter);
+        writeArtifact(project.getArtifact(), jsonWriter);
         jsonWriter.endArray();
     }
 
-    private static void writeArtifact(File artifact, JsonWriter jsonWriter) throws IOException {
-        String jar = artifact.getName();
+    private static void writeArtifact(Artifact artifact, JsonWriter jsonWriter) throws IOException {
+        File file = artifact.getFile();
+        String fileName = getFileNameForArtifact(artifact);
 
         jsonWriter.beginObject();
         jsonWriter.name("name");
-        jsonWriter.value(jar);
+        jsonWriter.value(fileName);
         jsonWriter.name("url");
-        jsonWriter.value(jar);
+        jsonWriter.value(fileName);
 
         jsonWriter.name("size");
-        jsonWriter.value(artifact.length());
-        writeChecksums(artifact, jsonWriter);
+        jsonWriter.value(file.length());
+        writeChecksums(file, jsonWriter);
 
         jsonWriter.endObject();
+    }
+
+    private static String getFileNameForArtifact(Artifact artifact) {
+        String originalFileName = artifact.getFile().getName();
+        int fileExtensionIndex = originalFileName.lastIndexOf(".");
+        if (fileExtensionIndex == -1) {
+            return originalFileName;
+        }
+        String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(artifact.getArtifactId()).append('-');
+        fileName.append(artifact.getVersion());
+        if (artifact.getClassifier() != null && artifact.getClassifier().length() > 0) {
+            fileName.append('-').append(artifact.getClassifier());
+        }
+        fileName.append('.').append(extension);
+        return fileName.toString();
     }
 
     private static void writeChecksums(File artifact, JsonWriter jsonWriter) throws IOException {
