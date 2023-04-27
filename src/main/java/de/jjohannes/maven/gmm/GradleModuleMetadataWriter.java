@@ -50,11 +50,12 @@ public class GradleModuleMetadataWriter {
 
     public static void generateTo(MavenProject project, String mavenVersion,
                                   List<Dependency> platformDependencies, List<Capability> capabilities,
+                                  List<Dependency> removedDependencies,
                                   Writer writer) throws IOException {
         JsonWriter jsonWriter = new JsonWriter(writer);
         jsonWriter.setHtmlSafe(false);
         jsonWriter.setIndent("  ");
-        writeComponentWithVariants(project, mavenVersion, platformDependencies, capabilities, jsonWriter);
+        writeComponentWithVariants(project, mavenVersion, platformDependencies, capabilities, removedDependencies, jsonWriter);
         jsonWriter.flush();
         writer.append('\n');
     }
@@ -83,12 +84,13 @@ public class GradleModuleMetadataWriter {
 
     private static void writeComponentWithVariants(MavenProject project, String mavenVersion,
                                                    List<Dependency> platformDependencies, List<Capability> capabilities,
+                                                   List<Dependency> removedDependencies,
                                                    JsonWriter jsonWriter) throws IOException {
         jsonWriter.beginObject();
         writeFormat(jsonWriter);
         writeIdentity(project, jsonWriter);
         writeCreator(mavenVersion, jsonWriter);
-        writeVariants(project, platformDependencies, capabilities, jsonWriter);
+        writeVariants(project, platformDependencies, capabilities, removedDependencies, jsonWriter);
         jsonWriter.endObject();
     }
 
@@ -110,11 +112,12 @@ public class GradleModuleMetadataWriter {
 
     private static void writeVariants(MavenProject project,
                                       List<Dependency> platformDependencies, List<Capability> capabilities,
+                                      List<Dependency> removedDependencies,
                                       JsonWriter jsonWriter) throws IOException {
         jsonWriter.name("variants");
         jsonWriter.beginArray();
-        writeVariant(project, Variant.API_ELEMENTS, platformDependencies, capabilities, jsonWriter);
-        writeVariant(project, Variant.RUNTIME_ELEMENTS, platformDependencies, capabilities, jsonWriter);
+        writeVariant(project, Variant.API_ELEMENTS, platformDependencies, capabilities, removedDependencies, jsonWriter);
+        writeVariant(project, Variant.RUNTIME_ELEMENTS, platformDependencies, capabilities, removedDependencies, jsonWriter);
         jsonWriter.endArray();
     }
 
@@ -136,12 +139,13 @@ public class GradleModuleMetadataWriter {
 
     private static void writeVariant(MavenProject project, Variant variant,
                                      List<Dependency> platformDependencies, List<Capability> capabilities,
+                                     List<Dependency> removedDependencies,
                                      JsonWriter jsonWriter) throws IOException {
         jsonWriter.beginObject();
         jsonWriter.name("name");
         jsonWriter.value(variant.name);
         writeAttributes(variantAttributes(variant), jsonWriter);
-        writeDependencies(variant, project.getDependencies(), platformDependencies, jsonWriter);
+        writeDependencies(variant, project.getDependencies(), platformDependencies, removedDependencies, jsonWriter);
         writeArtifacts(project, jsonWriter);
         writeCapabilities(project, capabilities, jsonWriter);
 
@@ -218,6 +222,7 @@ public class GradleModuleMetadataWriter {
 
     private static void writeDependencies(Variant variant,
                                           List<Dependency> dependencies, List<Dependency> platformDependencies,
+                                          List<Dependency> removedDependencies,
                                           JsonWriter jsonWriter) throws IOException {
         if (dependencies.isEmpty() && isNullOrEmpty(platformDependencies)) {
             return;
@@ -225,9 +230,20 @@ public class GradleModuleMetadataWriter {
         jsonWriter.name("dependencies");
         jsonWriter.beginArray();
         for (Dependency dependency : dependencies) {
-            if (variant.scopes.contains(dependency.getScope())) {
-                writeDependency(dependency, false, jsonWriter);
+            if (Boolean.parseBoolean(dependency.getOptional())) {
+                // Dependency is optional, all tooling ignores it
+                continue;
             }
+            if (!variant.scopes.contains(dependency.getScope())) {
+                // Dependency is not in scope
+                continue;
+            }
+            if (removedDependencies != null && removedDependencies.stream().anyMatch(removed ->
+                    dependency.getGroupId().equals(removed.getGroupId()) && dependency.getArtifactId().equals(removed.getArtifactId()))) {
+                // Dependency is explicitly removed (e.g. because the shade plugin removes it from the POM as well)
+                continue;
+            }
+            writeDependency(dependency, false, jsonWriter);
         }
         if (!isNullOrEmpty(platformDependencies)) {
             for (Dependency dependency : platformDependencies) {

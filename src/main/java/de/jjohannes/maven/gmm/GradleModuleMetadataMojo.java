@@ -51,6 +51,9 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
     @Parameter
     protected List<Capability> capabilities;
 
+    @Parameter
+    protected List<Dependency> removedDependencies;
+
     @Parameter(defaultValue = "${project.build.directory}/publications/maven")
     private File outputDirectory;
 
@@ -68,7 +71,11 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
         File moduleFile = new File(outputDirectory, "module.json");
 
         try (FileWriter fileWriter = new FileWriter(moduleFile)) {
-            GradleModuleMetadataWriter.generateTo(project, getMavenVersion(), platformDependencies, capabilities, fileWriter);
+            GradleModuleMetadataWriter.generateTo(
+                    project, getMavenVersion(),
+                    platformDependencies, capabilities,
+                    removedDependencies,
+                    fileWriter);
         } catch (IOException e) {
             throw new MojoExecutionException("Error creating file " + moduleFile, e);
         }

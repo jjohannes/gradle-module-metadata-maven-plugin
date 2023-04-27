@@ -64,6 +64,11 @@ public class GradleModuleMetadataMojoTest {
         assertExpectedGMM("parent-dependencies");
     }
 
+    @Test
+    public void testCombineWithShadePlugin() throws Exception {
+        assertExpectedGMM("combine-with-shade-plugin");
+    }
+
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void assertExpectedGMM(String name) throws Exception  {
         File testProject = new File("target/test-classes/" + name);
