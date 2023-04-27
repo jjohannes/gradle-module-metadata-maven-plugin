@@ -6,7 +6,7 @@
 
   <groupId>de.jjohannes</groupId>
   <artifactId>gradle-module-metadata-maven-plugin</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
   <packaging>maven-plugin</packaging>
 
   <name>Gradle Module Metadata Maven Plugin</name>
@@ -29,7 +29,7 @@
   <developers>
     <developer>
       <name>Jendrik Johannes</name>
-      <email>jendrik@gradle.com</email>
+      <email>jendrik@gradlex.org</email>
     </developer>
   </developers>
 
@@ -167,7 +167,7 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
+        <version>1.6.13</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>ossrh</serverId>
