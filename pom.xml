@@ -37,7 +37,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.version>3.6.0</maven.version>
+    <maven.version>3.8.1</maven.version>
     <project.build.outputTimestamp>1653117139</project.build.outputTimestamp>
   </properties>
 
