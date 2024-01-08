@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,15 @@
 package de.jjohannes.maven.gmm;
 
 import org.apache.maven.Maven;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -35,6 +33,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 /**
  * Goal that generates Gradle Module Metadata.
@@ -55,7 +54,12 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
     protected List<Dependency> removedDependencies;
 
     @Parameter(defaultValue = "${project.build.directory}/publications/maven")
+    @SuppressWarnings("unused")
     private File outputDirectory;
+
+    @Component
+    @SuppressWarnings("unused")
+    private MavenProjectHelper projectHelper;
 
     public void execute() throws MojoExecutionException {
         if ("pom".equals(project.getPackaging())) {
@@ -80,17 +84,14 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
             throw new MojoExecutionException("Error creating file " + moduleFile, e);
         }
 
-        Artifact gmmArtifact = new DefaultArtifact(project.getGroupId(), project.getArtifactId(), project.getVersion(),
-                null, "module", null, new DefaultArtifactHandler("module"));
-        gmmArtifact.setFile(moduleFile);
-        project.addAttachedArtifact(gmmArtifact);
+        projectHelper.attachArtifact(project, "module", moduleFile);
     }
 
     private void assertMarkerCommentDefinedInPom() {
         String marker = "do_not_remove: published-with-gradle-metadata";
         File pomFile = project.getFile();
-        try {
-            if (Files.lines(pomFile.toPath()).noneMatch(line -> line.contains(marker))) {
+        try(Stream<String> lines = Files.lines(pomFile.toPath()))  {
+            if (lines.noneMatch(line -> line.contains(marker))) {
                 throw new RuntimeException("Please add the Gradle Module Metadata marker '<!-- " + marker + " -->' to " + pomFile.getAbsolutePath());
             }
         } catch (IOException e) {

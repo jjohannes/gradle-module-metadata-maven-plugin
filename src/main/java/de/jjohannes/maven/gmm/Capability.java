@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 package de.jjohannes.maven.gmm;
 
 /**
- * https://docs.gradle.org/current/userguide/component_capabilities.html
+ * <a href="https://docs.gradle.org/current/userguide/component_capabilities.html">
+ *     docs.gradle.org/current/userguide/component_capabilities.html
+ * </a>
  */
 public class Capability {
     private String groupId;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -202,7 +202,7 @@ public class GradleModuleMetadataWriter {
         StringBuilder fileName = new StringBuilder();
         fileName.append(artifact.getArtifactId()).append('-');
         fileName.append(artifact.getVersion());
-        if (artifact.getClassifier() != null && artifact.getClassifier().length() > 0) {
+        if (artifact.getClassifier() != null && !artifact.getClassifier().isEmpty()) {
             fileName.append('-').append(artifact.getClassifier());
         }
         fileName.append('.').append(extension);
