@@ -178,7 +178,7 @@ class GMMMavenPluginTest extends Specification {
 
 
     void installPluginLocally() {
-        print "mvn clean install -DskipTests".execute(null, new File("..")).text
+        print "mvn clean install -DskipTests -Dgpg.skip".execute(null, new File("..")).text
     }
 
     void installProducerLocally() {
