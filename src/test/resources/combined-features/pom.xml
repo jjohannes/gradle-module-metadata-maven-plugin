@@ -9,6 +9,9 @@
   <version>1.0</version>
   <packaging>jar</packaging>
   <name>Test GMM Mojo</name>
+  <properties>
+    <project.build.outputTimestamp>2023-01-01T00:00:00Z</project.build.outputTimestamp>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -29,6 +32,13 @@
       <plugin>
         <groupId>de.jjohannes</groupId>
         <artifactId>gradle-module-metadata-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>gmm</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <platformDependencies>
             <dependency>

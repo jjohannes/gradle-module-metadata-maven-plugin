@@ -15,16 +15,21 @@
  */
 package de.jjohannes.maven.gmm.integtests
 
-
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder;
 import spock.lang.Specification
+import spock.lang.TempDir
+
+import java.nio.file.Files
+
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 class GMMMavenPluginTest extends Specification {
 
-    @Rule
-    TemporaryFolder testFolder = new TemporaryFolder()
+    @TempDir
+    File testFolder
 
     File mavenProducerBuild
     File gradleConsumerBuild
@@ -34,8 +39,10 @@ class GMMMavenPluginTest extends Specification {
     }
 
     def setup() {
-        def mavenProducer = testFolder.newFolder("mavenProducer")
-        def gradleConsumer = testFolder.newFolder("gradleConsumer")
+        def mavenProducer = new File(testFolder, "mavenProducer")
+        def gradleConsumer = new File(testFolder, "gradleConsumer")
+        mavenProducer.mkdirs()
+        gradleConsumer.mkdirs()
 
         new File(gradleConsumer,'settings.gradle.kts') << 'rootProject.name = "consumer"'
 
@@ -168,6 +175,41 @@ class GMMMavenPluginTest extends Specification {
         !moduleJsonGenerated()
     }
 
+    def testCapabilities() {
+        expect:
+        assertExpectedGMM("capabilities")
+    }
+
+    def testCombinedFeatures() {
+        expect:
+        assertExpectedGMM("combined-features")
+    }
+
+    def testPlatformDependencies() {
+        expect:
+        assertExpectedGMM("platform-dependencies")
+    }
+
+    def testSnapshotStatusAttribute() {
+        expect:
+        assertExpectedGMM("snapshot-status-attribute")
+    }
+
+    def testVariantDependencies() {
+        expect:
+        assertExpectedGMM("variant-dependencies")
+    }
+
+    def testParentDependencies() {
+        expect:
+        assertExpectedGMM("parent-dependencies")
+    }
+
+    def testCombineWithShadePlugin() {
+        expect:
+        assertExpectedGMM("combine-with-shade-plugin")
+    }
+
     List<String> resolve() {
         def buildResult = GradleRunner.create()
                 .forwardOutput()
@@ -175,7 +217,6 @@ class GMMMavenPluginTest extends Specification {
                 .withArguments('resolve', '-q').build()
         return buildResult.output.trim().split('\n')
     }
-
 
     void installPluginLocally() {
         print "mvn clean install -DskipTests -Dgpg.skip".execute(null, new File("..")).text
@@ -185,7 +226,34 @@ class GMMMavenPluginTest extends Specification {
         print "mvn clean install".execute(null, mavenProducerBuild.getParentFile()).text
     }
 
+    void packageProducer() {
+        print "mvn clean package".execute(null, mavenProducerBuild.getParentFile()).text
+    }
+
     private boolean moduleJsonGenerated() {
         new File(mavenProducerBuild.parentFile, "target/publications/maven/module.json").exists()
+    }
+
+    private void assertExpectedGMM(String name) throws Exception  {
+        File testPom = new File("../src/test/resources/$name/pom.xml")
+        File testPomParent = new File("../src/test/resources/$name/parent/pom.xml")
+        File gmmExpected = new File("../src/test/resources/$name/expected-module.json")
+        assertTrue(gmmExpected.exists())
+
+        Files.copy(testPom.toPath(), mavenProducerBuild.toPath())
+        if (testPomParent.exists()) {
+            def mavenProducerParent = new File(mavenProducerBuild.parentFile, "parent/pom.xml")
+            mavenProducerParent.parentFile.mkdirs()
+            Files.copy(testPomParent.toPath(), mavenProducerParent.toPath())
+        }
+
+        packageProducer()
+
+        File gmmActual = new File(mavenProducerBuild.parentFile, "target/publications/maven/module.json")
+        assertTrue(gmmActual.exists())
+
+        JsonElement expected = JsonParser.parseReader(new FileReader(gmmExpected))
+        JsonElement actual = JsonParser.parseReader(new FileReader(gmmActual))
+        assertEquals(expected, actual)
     }
 }
