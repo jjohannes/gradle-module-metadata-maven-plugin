@@ -1,15 +1,19 @@
 name: Build Plugin
-on: [ push, pull_request ]
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   gradle-build:
     runs-on: ubuntu-latest
     steps:
-      - name: git clone
-        uses: actions/checkout@v4.1.1
-      - name: Set up JDK
-        uses: actions/setup-java@v4.0.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
-      - run: mvn --batch-mode --no-transfer-progress -Dgpg.skip clean install
-      - run: "integTest/gradlew -p integTest check"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: "./gradlew build"
