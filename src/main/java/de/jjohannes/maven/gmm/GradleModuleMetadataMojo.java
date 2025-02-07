@@ -19,13 +19,13 @@ import org.apache.maven.Maven;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
+import javax.inject.Inject;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -54,11 +54,9 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
     protected List<Dependency> removedDependencies;
 
     @Parameter(defaultValue = "${project.build.directory}/publications/maven")
-    @SuppressWarnings("unused")
     private File outputDirectory;
 
-    @Component
-    @SuppressWarnings("unused")
+    @Inject
     private MavenProjectHelper projectHelper;
 
     public void execute() throws MojoExecutionException {
