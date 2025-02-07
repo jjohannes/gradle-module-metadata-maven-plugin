@@ -46,11 +46,11 @@
         {
           "name": "example-1.0.jar",
           "url": "example-1.0.jar",
-          "size": 1713,
-          "sha512": "ffb06781058c2dd53882dc9a6bbeb354f734be5d78936b736bd2998b6373f0b008a52a2dd0db4cf5cb628ed2f1903c212e5e79ccc02b5a0fcb4918c2e76c6934",
-          "sha256": "51c3c9fe23897b4076bb41c576ef19ba0f7878c6b9e042da533293b8c3927fd0",
-          "sha1": "e7271b2c323be638ca4bd27fd8ab67c23da94a72",
-          "md5": "1b0b27cfc568ca5da16528b1ecb5cbd8"
+          "size": 1734,
+          "sha512": "d0f137324bda3e67b111517f989bb567f0a93481aa3054013fc3db21901947d67f00602e10c63de927b13900b32400237c1a92b6d54cdb738c4d8ec4bd5b8228",
+          "sha256": "87726c84f5d1c1e79c3d906a886b711c3d1f953402c4c8b315c549ef82a36e11",
+          "sha1": "96987cd9e0547de8c9fe2ccc8983c18f7eaf00ea",
+          "md5": "f91c2c7096a1a4a95e7845f0140fe9cd"
         }
       ],
       "capabilities": [
@@ -105,11 +105,11 @@
         {
           "name": "example-1.0.jar",
           "url": "example-1.0.jar",
-          "size": 1713,
-          "sha512": "ffb06781058c2dd53882dc9a6bbeb354f734be5d78936b736bd2998b6373f0b008a52a2dd0db4cf5cb628ed2f1903c212e5e79ccc02b5a0fcb4918c2e76c6934",
-          "sha256": "51c3c9fe23897b4076bb41c576ef19ba0f7878c6b9e042da533293b8c3927fd0",
-          "sha1": "e7271b2c323be638ca4bd27fd8ab67c23da94a72",
-          "md5": "1b0b27cfc568ca5da16528b1ecb5cbd8"
+          "size": 1734,
+          "sha512": "d0f137324bda3e67b111517f989bb567f0a93481aa3054013fc3db21901947d67f00602e10c63de927b13900b32400237c1a92b6d54cdb738c4d8ec4bd5b8228",
+          "sha256": "87726c84f5d1c1e79c3d906a886b711c3d1f953402c4c8b315c549ef82a36e11",
+          "sha1": "96987cd9e0547de8c9fe2ccc8983c18f7eaf00ea",
+          "md5": "f91c2c7096a1a4a95e7845f0140fe9cd"
         }
       ],
       "capabilities": [

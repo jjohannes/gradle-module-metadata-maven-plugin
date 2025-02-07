@@ -10,7 +10,7 @@
   },
   "createdBy": {
     "maven": {
-      "version": "3.9.6"
+      "version": "3.9.9"
     }
   },
   "variants": [
@@ -35,11 +35,11 @@
         {
           "name": "example-1.0.jar",
           "url": "example-1.0.jar",
-          "size": 1,
-          "sha512": "7846cdd4c2b9052768b8901640122e5282e0b833a6a58312a7763472d448ee23781c7f08d90793fdfe71ffe74238cf6e4aa778cc9bb8cec03ea7268d4893a502",
-          "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
-          "sha1": "df58248c414f342c81e056b40bee12d17a08bf61",
-          "md5": "3389dae361af79b04c9c8e7057f60cc6"
+          "size": 1632,
+          "sha512": "44f77fd209ee4f5b2ff4f74b19830005a822426d170c8ebd45bd0b999e75c2c08e37a24b655493e32b5cd8c90a274a9bf93b018070ba2a41ac3d3f7f1658bfe3",
+          "sha256": "38414780be7d22a4bd22e363b436e249f2b2b0efa41e0d8e66934601225422f5",
+          "sha1": "1afd8d76c248b8be24811df77b6d71c38a2a4c2",
+          "md5": "95a3bfd752b21f8d277bad41bf832d77"
         }
       ]
     },
@@ -64,11 +64,11 @@
         {
           "name": "example-1.0.jar",
           "url": "example-1.0.jar",
-          "size": 1,
-          "sha512": "7846cdd4c2b9052768b8901640122e5282e0b833a6a58312a7763472d448ee23781c7f08d90793fdfe71ffe74238cf6e4aa778cc9bb8cec03ea7268d4893a502",
-          "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
-          "sha1": "df58248c414f342c81e056b40bee12d17a08bf61",
-          "md5": "3389dae361af79b04c9c8e7057f60cc6"
+          "size": 1632,
+          "sha512": "44f77fd209ee4f5b2ff4f74b19830005a822426d170c8ebd45bd0b999e75c2c08e37a24b655493e32b5cd8c90a274a9bf93b018070ba2a41ac3d3f7f1658bfe3",
+          "sha256": "38414780be7d22a4bd22e363b436e249f2b2b0efa41e0d8e66934601225422f5",
+          "sha1": "1afd8d76c248b8be24811df77b6d71c38a2a4c2",
+          "md5": "95a3bfd752b21f8d277bad41bf832d77"
         }
       ]
     }

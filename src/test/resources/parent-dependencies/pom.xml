@@ -16,6 +16,7 @@
   <packaging>jar</packaging>
   <name>Test GMM Mojo</name>
   <properties>
+    <maven.compiler.release>8</maven.compiler.release>
     <project.build.outputTimestamp>2023-01-01T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
