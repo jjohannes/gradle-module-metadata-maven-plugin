@@ -217,6 +217,11 @@ class GMMMavenPluginTest {
     }
 
     @Test
+    void testCompileOnlyApiDependencies() {
+        assertExpectedGMM("compile-only-api-dependencies");
+    }
+
+    @Test
     void testParentDependencies() {
         assertExpectedGMM("parent-dependencies");
     }
