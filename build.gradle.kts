@@ -1,6 +1,6 @@
 plugins {
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0" // replace with id("com.gradleup.nmcp") version "0.0.9"
     id("org.gradlex.maven-plugin-development") version "1.0.2"
+    id("com.gradleup.nmcp") version "0.0.9"
     id("maven-publish")
     id("signing")
     id("checkstyle")
@@ -27,6 +27,8 @@ mavenPlugin {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.compileJava {
@@ -35,7 +37,15 @@ tasks.compileJava {
 }
 
 tasks.javadoc {
-    (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:all,-missing", "-Xwerror")
+    options {
+        this as StandardJavadocDocletOptions
+        addStringOption("Xdoclint:all,-missing", "-Xwerror")
+        tags(
+            "goal:a:Goal:",
+            "requiresProject:a:Requires Project:",
+            "threadSafe:a:Thread Safe:"
+        )
+    }
 }
 
 @Suppress("UnstableApiUsage")
@@ -74,20 +84,21 @@ publishing {
     }
 }
 
-// signing {
-//     useInMemoryPgpKeys(
-//         providers.environmentVariable("SIGNING_KEY").getOrNull(),
-//         providers.environmentVariable("SIGNING_PASSPHRASE").getOrNull()
-//     )
-//     if (providers.environmentVariable("CI").getOrElse("false").toBoolean()) {
-//         sign(publishing.publications["mavenPlugin"])
-//     }
-// }
+signing {
+    if (providers.gradleProperty("sign").getOrElse("false").toBoolean()) {
+        useInMemoryPgpKeys(
+            providers.environmentVariable("SIGNING_KEY").getOrNull(),
+            providers.environmentVariable("SIGNING_PASSPHRASE").getOrNull()
+        )
+        sign(publishing.publications["mavenPlugin"])
+    }
+}
 
-nexusPublishing {
-    repositories.sonatype {
-        username = providers.environmentVariable("NEXUS_USERNAME")
-        password = providers.environmentVariable("NEXUS_PASSWORD")
+nmcp {
+    publish("mavenPlugin") {
+        username = providers.environmentVariable("MAVEN_CENTRAL_USERNAME")
+        password = providers.environmentVariable("MAVEN_CENTRAL_PASSWORD")
+        publicationType = "USER_MANAGED" // "AUTOMATIC"
     }
 }
 

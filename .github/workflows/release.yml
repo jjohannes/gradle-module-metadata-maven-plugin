@@ -1,0 +1,21 @@
+name: Publish Release
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: "./gradlew publishAllPublicationsToCentralPortal -Psign=true"
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
