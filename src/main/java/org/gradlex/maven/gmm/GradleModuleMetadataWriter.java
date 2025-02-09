@@ -1,5 +1,5 @@
 /*
- * Copyright the original author or authors.
+ * Copyright the GradleX team.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package de.jjohannes.maven.gmm;
+package org.gradlex.maven.gmm;
 
 import com.google.gson.stream.JsonWriter;
-import de.jjohannes.maven.gmm.checksums.HashUtil;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.project.MavenProject;
+import org.gradlex.maven.gmm.checksums.HashUtil;
 
 import java.io.File;
 import java.io.IOException;

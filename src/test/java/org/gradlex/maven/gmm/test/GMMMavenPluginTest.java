@@ -1,5 +1,5 @@
 /*
- * Copyright the original author or authors.
+ * Copyright the GradleX team.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.jjohannes.maven.gmm.test;
+package org.gradlex.maven.gmm.test;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -71,7 +71,7 @@ class GMMMavenPluginTest {
                 <project>
                   <!-- do_not_remove: published-with-gradle-metadata -->
                   <modelVersion>4.0.0</modelVersion>
-                  <groupId>de.jjohannes</groupId>
+                  <groupId>org.gradlex</groupId>
                   <artifactId>gradle-module-metadata-maven-plugin-integration-test</artifactId>
                   <version>1.0</version>
                   <packaging>$packaging</packaging>
@@ -88,7 +88,7 @@ class GMMMavenPluginTest {
                   <build>
                     <plugins>
                       <plugin>
-                        <groupId>de.jjohannes</groupId>
+                        <groupId>org.gradlex</groupId>
                         <artifactId>gradle-module-metadata-maven-plugin</artifactId>
                         <executions>
                           <execution>
@@ -152,7 +152,7 @@ class GMMMavenPluginTest {
         """, "jar");
 
         consumerDependencies("""
-            implementation("de.jjohannes:gradle-module-metadata-maven-plugin-integration-test:1.0") {
+            implementation("org.gradlex:gradle-module-metadata-maven-plugin-integration-test:1.0") {
                 capabilities {
                     requireCapability("org.foo:another")
                 }
@@ -178,7 +178,7 @@ class GMMMavenPluginTest {
         """, "jar");
 
         consumerDependencies("""
-            implementation("de.jjohannes:gradle-module-metadata-maven-plugin-integration-test:1.0")
+            implementation("org.gradlex:gradle-module-metadata-maven-plugin-integration-test:1.0")
             implementation("com.fasterxml.jackson.core:jackson-core")
         """);
 

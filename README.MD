@@ -1,7 +1,7 @@
 # Maven plugin to publish Gradle Module Metadata
 
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fgradlex-org%2Fgradle-module-metadata-maven-plugin%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/gradlex-org/gradle-module-metadata-maven-plugin/goto?ref=main)
-[![Maven Central](https://img.shields.io/maven-metadata/v?label=Maven%Central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fgradlex%2Fgradle-module-metadata-maven-plugin%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/org/gradlex/gradle-module-metadata-maven-plugin/maven-metadata.xml)
+[![Maven Central](https://img.shields.io/maven-metadata/v?label=Maven%20Central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fgradlex%2Fgradle-module-metadata-maven-plugin%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/org/gradlex/gradle-module-metadata-maven-plugin/maven-metadata.xml)
 
 This Maven plugin is for JVM library developers that use Maven as build tool, but are also interested in supporting Gradle users of their library by leveraging some of the new dependency managment features introdued with Gradle 6.
 
@@ -14,6 +14,7 @@ If published, Gradle 6+ can make use of that information during dependency resol
 Currently, this plugin supports the following features that cannot be expressed in POM metadata:
 
 - [Platform Dependencies](https://blog.gradle.org/alignment-with-gradle-module-metadata)
+- [compileOnlyApi Dependency Scope](https://docs.gradle.org/current/userguide/java_library_plugin.html#sec:java_library_configurations_graph)
 - [Capabilities](https://blog.gradle.org/addressing-logging-complexity-capabilities)
 
 ## Using the Plugin
@@ -30,7 +31,7 @@ Add the plugin to your build:
 <build>
   <plugins>
     <plugin>
-      <groupId>de.jjohannes</groupId>
+      <groupId>org.gradlex</groupId>
       <artifactId>gradle-module-metadata-maven-plugin</artifactId>
       <version>1.0</version>
       <executions>
@@ -87,7 +88,7 @@ For example:
 
 If you add that to your POM, the `jackson-bom` will automatically be used by all Gradle 6+ builds depending on your library. 
 
-## Adding a compileOnlyApi dependency
+## Adding compileOnlyApi dependencies
 
 When a Java library is used in a project, there are two different contexts it is used in:
 **Compile Classpath** and **Runtime Classpath**.
@@ -164,7 +165,7 @@ Gradle Module Metadata offers many more features.
 To make use of them, you should consider to use [Gradle 6+](https://docs.gradle.org/current/userguide/getting_started.html) directly as build tool for your library.
 
 There might still be some other interesting things that could be done in Maven builds by extending this plugin.
-In that case, please [file an issue](https://github.com/jjohannes/gradle-module-metadata-maven-plugin/issues) (or [open a pull request](https://github.com/jjohannes/gradle-module-metadata-maven-plugin/pulls)) that describes the use case.
+In that case, please [file an issue](https://github.com/gradlex-org/gradle-module-metadata-maven-plugin/issues) (or [open a pull request](https://github.com/gradlex-org/gradle-module-metadata-maven-plugin/pulls)) that describes the use case.
 
 # Disclaimer
 

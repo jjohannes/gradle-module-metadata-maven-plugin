@@ -26,11 +26,11 @@
         {
           "name": "example-1.0-SNAPSHOT.jar",
           "url": "example-1.0-SNAPSHOT.jar",
-          "size": 1561,
-          "sha512": "37f0a886cd2603e648dc26b8dc9c4336a52bce3564e38379df16660d339092fdf9fe9d5af112b5e4738594d15b5915273e94a3fd8e84910ec720611f61d2cd90",
-          "sha256": "7915f61eeb261888e088e5f42d8d670c024162307019136a25ec530c32963342",
-          "sha1": "729656489d0379fb1b7544b78b0578453fbec5a1",
-          "md5": "1fe1b31e6c0d3f38f72638ff86166e66"
+          "size": 1556,
+          "sha512": "aede924f36e4b9b1829d7fd9e23410a7b287c946d58ae3d0bcfa4858009cc25beed02b8fbeeb5da05d2b71bca699e52445e9579bac8400d212f0296a2a5be34c",
+          "sha256": "9f8923fd67cd6d74c6ab3d05e5b78a82d335727a667683dba3a7f870e82b21a3",
+          "sha1": "686769dbbfd6dd8d7885d26a1bd54dba430ff62f",
+          "md5": "e98bd1e75ce53eddb91f8d664d6d2061"
         }
       ]
     },
@@ -46,11 +46,11 @@
         {
           "name": "example-1.0-SNAPSHOT.jar",
           "url": "example-1.0-SNAPSHOT.jar",
-          "size": 1561,
-          "sha512": "37f0a886cd2603e648dc26b8dc9c4336a52bce3564e38379df16660d339092fdf9fe9d5af112b5e4738594d15b5915273e94a3fd8e84910ec720611f61d2cd90",
-          "sha256": "7915f61eeb261888e088e5f42d8d670c024162307019136a25ec530c32963342",
-          "sha1": "729656489d0379fb1b7544b78b0578453fbec5a1",
-          "md5": "1fe1b31e6c0d3f38f72638ff86166e66"
+          "size": 1556,
+          "sha512": "aede924f36e4b9b1829d7fd9e23410a7b287c946d58ae3d0bcfa4858009cc25beed02b8fbeeb5da05d2b71bca699e52445e9579bac8400d212f0296a2a5be34c",
+          "sha256": "9f8923fd67cd6d74c6ab3d05e5b78a82d335727a667683dba3a7f870e82b21a3",
+          "sha1": "686769dbbfd6dd8d7885d26a1bd54dba430ff62f",
+          "md5": "e98bd1e75ce53eddb91f8d664d6d2061"
         }
       ]
     }

@@ -6,7 +6,7 @@ plugins {
     id("checkstyle")
 }
 
-group = "de.jjohannes"
+group = "org.gradlex"
 version = "1.0"
 
 val mvnVersion = "3.9.9"
@@ -22,7 +22,7 @@ dependencies {
 mavenPlugin {
     name = "Gradle Module Metadata Maven Plugin"
     description = "A Maven plugin to publish Gradle Module Metadata"
-    helpMojoPackage = "de.jjohannes.maven.gmm"
+    helpMojoPackage = "org.gradlex.maven.gmm"
 }
 
 java {
@@ -35,7 +35,6 @@ tasks.compileJava {
 }
 
 tasks.javadoc {
-    // Enable all JavaDoc checks, but the one requiring JavaDoc everywhere
     (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:all,-missing", "-Xwerror")
 }
 
@@ -53,7 +52,7 @@ publishing {
         pom {
             name = mavenPlugin.name
             description = mavenPlugin.description
-            url = "https://github.com/jjohannes/gradle-module-metadata-maven-plugin"
+            url = "https://github.com/gradlex-org/gradle-module-metadata-maven-plugin"
             licenses {
                 license {
                     name = "Apache License, Version 2.0"
@@ -61,9 +60,9 @@ publishing {
                 }
             }
             scm {
-                connection = "scm:git:git://github.com/jjohannes/gradle-module-metadata-maven-plugin.git"
-                developerConnection = "scm:git:git://github.com/jjohannes/gradle-module-metadata-maven-plugin.git"
-                url = "https://github.com/jjohannes/gradle-module-metadata-maven-plugin"
+                connection = "scm:git:git://github.com/gradlex-org/gradle-module-metadata-maven-plugin.git"
+                developerConnection = "scm:git:git://github.com/gradlex-org/gradle-module-metadata-maven-plugin.git"
+                url = "https://github.com/gradlex-org/gradle-module-metadata-maven-plugin"
             }
             developers {
                 developer {

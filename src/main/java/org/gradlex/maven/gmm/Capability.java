@@ -1,5 +1,5 @@
 /*
- * Copyright the original author or authors.
+ * Copyright the GradleX team.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.jjohannes.maven.gmm;
+package org.gradlex.maven.gmm;
 
 /**
  * <a href="https://docs.gradle.org/current/userguide/component_capabilities.html">
