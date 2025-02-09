@@ -20,6 +20,8 @@ dependencies {
 }
 
 mavenPlugin {
+    name = "Gradle Module Metadata Maven Plugin"
+    description = "A Maven plugin to publish Gradle Module Metadata"
     helpMojoPackage = "de.jjohannes.maven.gmm"
 }
 
@@ -49,8 +51,8 @@ publishing {
     publications.create<MavenPublication>("mavenPlugin") {
         from(components["java"])
         pom {
-            name = "Gradle Module Metadata Maven Plugin"
-            description = "A Maven plugin to publish Gradle Module Metadata"
+            name = mavenPlugin.name
+            description = mavenPlugin.description
             url = "https://github.com/jjohannes/gradle-module-metadata-maven-plugin"
             licenses {
                 license {

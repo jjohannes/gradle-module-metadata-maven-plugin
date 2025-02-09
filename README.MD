@@ -1,5 +1,8 @@
 # Maven plugin to publish Gradle Module Metadata
 
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fgradlex-org%2Fgradle-module-metadata-maven-plugin%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/gradlex-org/gradle-module-metadata-maven-plugin/goto?ref=main)
+[![Maven Central](https://img.shields.io/maven-metadata/v?label=Maven%Central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fgradlex%2Fgradle-module-metadata-maven-plugin%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/org/gradlex/gradle-module-metadata-maven-plugin/maven-metadata.xml)
+
 This Maven plugin is for JVM library developers that use Maven as build tool, but are also interested in supporting Gradle users of their library by leveraging some of the new dependency managment features introdued with Gradle 6.
 
 This plugin allows you to publish [Gradle Module Metadata](https://github.com/gradle/gradle/blob/master/subprojects/docs/src/docs/design/gradle-module-metadata-latest-specification.md) for libraries built with Maven.
@@ -162,3 +165,8 @@ To make use of them, you should consider to use [Gradle 6+](https://docs.gradle.
 
 There might still be some other interesting things that could be done in Maven builds by extending this plugin.
 In that case, please [file an issue](https://github.com/jjohannes/gradle-module-metadata-maven-plugin/issues) (or [open a pull request](https://github.com/jjohannes/gradle-module-metadata-maven-plugin/pulls)) that describes the use case.
+
+# Disclaimer
+
+Gradle and the Gradle logo are trademarks of Gradle, Inc.
+The GradleX project is not endorsed by, affiliated with, or associated with Gradle or Gradle, Inc. in any way.
