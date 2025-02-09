@@ -84,6 +84,32 @@ For example:
 
 If you add that to your POM, the `jackson-bom` will automatically be used by all Gradle 6+ builds depending on your library. 
 
+## Adding a compileOnlyApi dependency
+
+When a Java library is used in a project, there are two different contexts it is used in:
+**Compile Classpath** and **Runtime Classpath**.
+For each dependency, the scope determines it's transitive visibility. There are four possible combinations:
+
+1. `api` transitively visible at **compile time** and **runtime** (in Maven: `compile`)
+2. `implementation` / `runtimeOnly` transitively visible only at **runtime** (in Maven: `runtime`)
+3. `compileOnlyApi` transitively visible only at **compile time** (no counterpart in Maven)
+4. `compileOnly` not transitively visible at all (in Maven: `provided`)
+
+The third case is interesting for annotation libraries that should be available to the Java compiler,
+and it's annotation processing, transitively. As this is not supported by Maven, these dependencies are usually
+omitted transitively (by defining them in the `provided` scope). With this plugin, `compileOnlyApi` dependencies
+can be added for Gradle users as follows:
+
+```
+<compileOnlyApiDependencies>
+  <dependency>
+    <groupId>com.google.errorprone</groupId>
+    <artifactId>error_prone_annotations</artifactId>
+    <version>2.36.0</version>
+  </dependency>
+</compileOnlyApiDependencies>
+```
+
 ## Defining capabilities
 
 A [capability](https://docs.gradle.org/current/userguide/dependency_capability_conflict.html) is defined by GAV coordinates just as a published component.
@@ -105,6 +131,29 @@ An example, from this [blog post](https://blog.gradle.org/guava), is `com.google
   </capability>
 </capabilities>
 ```
+
+## Removing a dependency that is removed from the POM by another plugin
+
+The plugin automatically adds dependencies defined in the original `pom.xml` to the Gradle Module Metadata.
+In cases where a modified `pom.xml`, with a different set of dependencies, gets published, this may not be correct.
+A prominent case is using the `maven-shade-plugin` with the `<createDependencyReducedPom>` option. In this case,
+some dependencies are removed for publishing. The Gradle Metadata plugin should then be configured
+to not add the corrsponding dependencies to the Gradle Metadata as well. This can be done as follows:
+
+```
+<removedDependencies>
+  <dependency>
+    <groupId>org.ow2.asm</groupId>
+    <artifactId>asm</artifactId>
+  </dependency>
+</removedDependencies>
+```
+
+Note: If the `pom.xml` is rewritten by another plugin, it may also remove the marker comment
+`<!-- do_not_remove: published-with-gradle-metadata -->`. It is essential that the comments is added back
+to the published `pom.xml`. In the case of the shade plugin, this can be done using the
+`find-and-replace-maven-plugin` on the generated `dependency-reduced-pom.xml`. You can find a full example
+[here](src/test/resources/combine-with-shade-plugin/pom.xml).
 
 ## Supporting more features
 

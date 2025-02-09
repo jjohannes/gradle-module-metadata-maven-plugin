@@ -57,11 +57,12 @@ public class GradleModuleMetadataWriter {
     public static void generateTo(MavenProject project, String mavenVersion,
                                   List<Dependency> platformDependencies, List<Capability> capabilities,
                                   List<Dependency> removedDependencies,
+                                  List<Dependency> compileOnlyApiDependencies,
                                   Writer writer) throws IOException {
         JsonWriter jsonWriter = new JsonWriter(writer);
         jsonWriter.setHtmlSafe(false);
         jsonWriter.setIndent("  ");
-        writeComponentWithVariants(project, mavenVersion, platformDependencies, capabilities, removedDependencies, jsonWriter);
+        writeComponentWithVariants(project, mavenVersion, platformDependencies, capabilities, removedDependencies, compileOnlyApiDependencies, jsonWriter);
         jsonWriter.flush();
         writer.append('\n');
     }
@@ -89,14 +90,16 @@ public class GradleModuleMetadataWriter {
     }
 
     private static void writeComponentWithVariants(MavenProject project, String mavenVersion,
-                                                   List<Dependency> platformDependencies, List<Capability> capabilities,
+                                                   List<Dependency> platformDependencies,
+                                                   List<Capability> capabilities,
                                                    List<Dependency> removedDependencies,
+                                                   List<Dependency> compileOnlyApiDependencies,
                                                    JsonWriter jsonWriter) throws IOException {
         jsonWriter.beginObject();
         writeFormat(jsonWriter);
         writeIdentity(project, jsonWriter);
         writeCreator(mavenVersion, jsonWriter);
-        writeVariants(project, platformDependencies, capabilities, removedDependencies, jsonWriter);
+        writeVariants(project, platformDependencies, capabilities, removedDependencies, compileOnlyApiDependencies, jsonWriter);
         jsonWriter.endObject();
     }
 
@@ -117,13 +120,15 @@ public class GradleModuleMetadataWriter {
 
 
     private static void writeVariants(MavenProject project,
-                                      List<Dependency> platformDependencies, List<Capability> capabilities,
+                                      List<Dependency> platformDependencies,
+                                      List<Capability> capabilities,
                                       List<Dependency> removedDependencies,
+                                      List<Dependency> compileOnlyApiDependencies,
                                       JsonWriter jsonWriter) throws IOException {
         jsonWriter.name("variants");
         jsonWriter.beginArray();
-        writeVariant(project, Variant.API_ELEMENTS, platformDependencies, capabilities, removedDependencies, jsonWriter);
-        writeVariant(project, Variant.RUNTIME_ELEMENTS, platformDependencies, capabilities, removedDependencies, jsonWriter);
+        writeVariant(project, Variant.API_ELEMENTS, platformDependencies, capabilities, removedDependencies, compileOnlyApiDependencies, jsonWriter);
+        writeVariant(project, Variant.RUNTIME_ELEMENTS, platformDependencies, capabilities, removedDependencies, null, jsonWriter);
         jsonWriter.endArray();
     }
 
@@ -144,14 +149,16 @@ public class GradleModuleMetadataWriter {
     }
 
     private static void writeVariant(MavenProject project, Variant variant,
-                                     List<Dependency> platformDependencies, List<Capability> capabilities,
+                                     List<Dependency> platformDependencies,
+                                     List<Capability> capabilities,
                                      List<Dependency> removedDependencies,
+                                     List<Dependency> addedDependencies,
                                      JsonWriter jsonWriter) throws IOException {
         jsonWriter.beginObject();
         jsonWriter.name("name");
         jsonWriter.value(variant.name);
         writeAttributes(variantAttributes(variant), jsonWriter);
-        writeDependencies(variant, project.getDependencies(), platformDependencies, removedDependencies, jsonWriter);
+        writeDependencies(variant, project.getDependencies(), platformDependencies, removedDependencies, addedDependencies, jsonWriter);
         writeArtifacts(project, jsonWriter);
         writeCapabilities(project, capabilities, jsonWriter);
 
@@ -227,10 +234,12 @@ public class GradleModuleMetadataWriter {
     }
 
     private static void writeDependencies(Variant variant,
-                                          List<Dependency> dependencies, List<Dependency> platformDependencies,
+                                          List<Dependency> dependencies,
+                                          List<Dependency> platformDependencies,
                                           List<Dependency> removedDependencies,
+                                          List<Dependency> addedDependencies,
                                           JsonWriter jsonWriter) throws IOException {
-        if (dependencies.isEmpty() && isNullOrEmpty(platformDependencies)) {
+        if (dependencies.isEmpty() && isNullOrEmpty(platformDependencies) && isNullOrEmpty(addedDependencies)) {
             return;
         }
         jsonWriter.name("dependencies");
@@ -251,6 +260,13 @@ public class GradleModuleMetadataWriter {
             }
             writeDependency(dependency, false, jsonWriter);
         }
+
+        if (!isNullOrEmpty(addedDependencies)) {
+            for (Dependency dependency : addedDependencies) {
+                writeDependency(dependency, false, jsonWriter);
+            }
+        }
+
         if (!isNullOrEmpty(platformDependencies)) {
             for (Dependency dependency : platformDependencies) {
                 if (dependency.getScope() == null || variant.scopes.contains(dependency.getScope())) {
@@ -310,6 +326,7 @@ public class GradleModuleMetadataWriter {
 
         jsonWriter.endObject();
     }
+
     private static void writeExcludes(List<Exclusion> excludes, JsonWriter jsonWriter) throws IOException {
         if (excludes.isEmpty()) {
             return;
