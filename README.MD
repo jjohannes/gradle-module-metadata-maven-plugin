@@ -32,7 +32,7 @@ Add the plugin to your build:
     <plugin>
       <groupId>de.jjohannes</groupId>
       <artifactId>gradle-module-metadata-maven-plugin</artifactId>
-      <version>0.2.0</version>
+      <version>1.0</version>
       <executions>
         <execution>
           <goals>

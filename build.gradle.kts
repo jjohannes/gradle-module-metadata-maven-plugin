@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.jjohannes"
-version = "0.5.0"
+version = "1.0"
 
 val mvnVersion = "3.9.9"
 
