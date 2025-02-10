@@ -3,14 +3,19 @@
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fgradlex-org%2Fgradle-module-metadata-maven-plugin%2Fbadge%3Fref%3Dmain&style=flat)](https://actions-badge.atrox.dev/gradlex-org/gradle-module-metadata-maven-plugin/goto?ref=main)
 [![Maven Central](https://img.shields.io/maven-metadata/v?label=Maven%20Central&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Forg%2Fgradlex%2Fgradle-module-metadata-maven-plugin%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/org/gradlex/gradle-module-metadata-maven-plugin/maven-metadata.xml)
 
-This Maven plugin is for JVM library developers that use Maven as build tool, but are also interested in supporting Gradle users of their library by leveraging some of the new dependency managment features introdued with Gradle 6.
+This Maven plugin is for JVM library developers that use Maven as build tool, but are also interested in supporting
+Gradle users of their library by leveraging some of the new dependency management features introduced with Gradle 6.
 
-This plugin allows you to publish [Gradle Module Metadata](https://github.com/gradle/gradle/blob/master/subprojects/docs/src/docs/design/gradle-module-metadata-latest-specification.md) for libraries built with Maven.
-It automatically adds the same dependency information present in the POM to a Gradle Module Metadata file (`.module`) and adds that file as additional artifact to be _installed_ and _published_.
-If Gradle Module Metadata is published, [Gradle 6+](https://gradle.org)  will use that information in place of the POM.
+This plugin allows you to publish
+[Gradle Module Metadata](https://github.com/gradle/gradle/blob/master/subprojects/docs/src/docs/design/gradle-module-metadata-latest-specification.md)
+for libraries built with Maven.
+It automatically adds the same dependency information present in the POM to a Gradle Module Metadata file (`.module`)
+and adds that file as additional artifact to be _installed_ and _published_. If Gradle Module Metadata is published,
+[Gradle 6+](https://gradle.org)  will use that information in place of the POM.
 
 Because Gradle Module Metadata is a richer format, it allows you to add additional information about your library.
-If published, Gradle 6+ can make use of that information during dependency resolution to detect and solve dependency conflicts that involve your library.
+If published, Gradle 6+ can make use of that information during dependency resolution to detect and solve dependency
+conflicts that involve your library.
 Currently, this plugin supports the following features that cannot be expressed in POM metadata:
 
 - [Platform Dependencies](https://blog.gradle.org/alignment-with-gradle-module-metadata)
@@ -18,12 +23,6 @@ Currently, this plugin supports the following features that cannot be expressed 
 - [Capabilities](https://blog.gradle.org/addressing-logging-complexity-capabilities)
 
 ## Using the Plugin
-
-Add this line to the top of you `pom.xml` right in the beginning of the `<project>` tag:
-
-```
-<!-- do_not_remove: published-with-gradle-metadata -->
-```
 
 Add the plugin to your build:
 
@@ -43,17 +42,13 @@ Add the plugin to your build:
       </executions>
       <configuration>
         <platformDependencies>
-          <dependency>
-            <groupId>...</groupId>
-            <artifactId>...</artifactId>
-            <version>...</version>
-          </dependency>
+          ...
         </platformDependencies>
+        <compileOnlyApiDependencies>
+          ...
+        </compileOnlyApiDependencies>
         <capabilities>
-          <capability>
-            <groupId>...</groupId>
-            <artifactId>...</artifactId>
-          </capability>
+          ...
         </capabilities>
       </configuration>
     </plugin>
@@ -61,7 +56,25 @@ Add the plugin to your build:
 </build>
 ```
 
-Note: You may apply the plugin in a parent POM to publish Gradle Module Metadata for all modules using that parent.
+> [!NOTE]  
+> You can add the plugin in a parent POM to publish Gradle Module Metadata for all modules using that parent.
+
+The published POM needs to contain the following line:
+
+```
+<!-- do_not_remove: published-with-gradle-metadata -->
+```
+
+If the comment is not preset, the plugin adds it automatically. If the published POM is the `pom.xml` of your project,
+you may move the comment to a different place in the file if you prefer. If the published POM is a file created by
+another plugin – such as the `flatten-maven-plugin` or `maven-shade-plugin` – the comment is added automatically, and
+you do not have to maintain it manually.  
+
+> [!WARNING]
+> This plugin runs in the `package` phase. If the published POM is modified in that phase, which is what the
+> `maven-shade-plugin` does, you need to guarantee that this plugin runs AFTER the other plugin. If you can't do that
+> you need to use some other method to add the comment to the POM after the `maven-shade-plugin` created it.
+> For example by using a `find-and-replace-maven-plugin` that puts the comment into the file.
 
 ## Adding platform dependencies
 
@@ -152,12 +165,6 @@ to not add the corrsponding dependencies to the Gradle Metadata as well. This ca
   </dependency>
 </removedDependencies>
 ```
-
-Note: If the `pom.xml` is rewritten by another plugin, it may also remove the marker comment
-`<!-- do_not_remove: published-with-gradle-metadata -->`. It is essential that the comments is added back
-to the published `pom.xml`. In the case of the shade plugin, this can be done using the
-`find-and-replace-maven-plugin` on the generated `dependency-reduced-pom.xml`. You can find a full example
-[here](src/test/resources/combine-with-shade-plugin/pom.xml).
 
 ## Supporting more features
 
