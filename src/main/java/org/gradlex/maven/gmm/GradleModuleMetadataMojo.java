@@ -34,7 +34,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 /**
  * Goal that generates Gradle Module Metadata.
@@ -74,7 +73,7 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
             return;
         }
 
-        assertMarkerCommentDefinedInPom();
+        addMarkerToPomIfNotPresent();
         if (!outputDirectory.exists()) {
             //noinspection ResultOfMethodCallIgnored
             outputDirectory.mkdirs();
@@ -97,12 +96,14 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
         projectHelper.attachArtifact(project, "module", moduleFile);
     }
 
-    private void assertMarkerCommentDefinedInPom() {
+    private void addMarkerToPomIfNotPresent() {
         String marker = "do_not_remove: published-with-gradle-metadata";
         File pomFile = project.getFile();
-        try (Stream<String> lines = Files.lines(pomFile.toPath())) {
-            if (lines.noneMatch(line -> line.contains(marker))) {
-                throw new RuntimeException("Please add the Gradle Module Metadata marker '<!-- " + marker + " -->' to " + pomFile.getAbsolutePath());
+        try {
+            String pomContent = new String(Files.readAllBytes(pomFile.toPath()));
+            if (!pomContent.contains(marker)) {
+                String newContent = pomContent.replaceFirst("</modelVersion>", "</modelVersion> <!-- " + marker + " -->");
+                Files.write(pomFile.toPath(), newContent.getBytes());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
