@@ -36,9 +36,7 @@ import java.util.List;
 
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.writeString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class GMMMavenPluginTest {
 
@@ -160,7 +158,8 @@ class GMMMavenPluginTest {
         """);
 
         moduleJsonGenerated();
-        assertEquals(resolve(), List.of("gradle-module-metadata-maven-plugin-integration-test-1.0.jar", "commons-io-2.6.jar"));
+        assertThat(resolve()).containsExactly(
+                "gradle-module-metadata-maven-plugin-integration-test-1.0.jar", "commons-io-2.6.jar");
     }
 
     @Test
@@ -183,10 +182,10 @@ class GMMMavenPluginTest {
         """);
 
         moduleJsonGenerated();
-        assertEquals(resolve(), List.of(
+        assertThat(resolve()).containsExactly(
                 "gradle-module-metadata-maven-plugin-integration-test-1.0.jar",
                 "jackson-core-2.10.2.jar",
-                "commons-io-2.6.jar"));
+                "commons-io-2.6.jar");
     }
 
     @Test
@@ -263,18 +262,18 @@ class GMMMavenPluginTest {
     }
 
     private void moduleJsonGenerated() {
-        assertTrue(new File(mavenProducerBuild.getParentFile(), "target/publications/maven/module.json").exists());
+        assertThat(new File(mavenProducerBuild.getParentFile(), "target/publications/maven/module.json")).exists();
     }
 
     private void moduleJsonNotGenerated() {
-        assertFalse(new File(mavenProducerBuild.getParentFile(), "target/publications/maven/module.json").exists());
+        assertThat(new File(mavenProducerBuild.getParentFile(), "target/publications/maven/module.json")).doesNotExist();
     }
 
     private void assertExpectedGMM(String name) {
         File testPom = new File("src/test/resources/" + name + "/pom.xml");
         File testPomParent = new File("src/test/resources/" + name + "/parent/pom.xml");
         File gmmExpected = new File("src/test/resources/" + name + "/expected-module.json");
-        assertTrue(gmmExpected.exists());
+        assertThat(gmmExpected).exists();
 
         try {
             Files.copy(testPom.toPath(), mavenProducerBuild.toPath());
@@ -287,11 +286,11 @@ class GMMMavenPluginTest {
             packageProducer();
 
             File gmmActual = new File(mavenProducerBuild.getParentFile(), "target/publications/maven/module.json");
-            assertTrue(gmmActual.exists());
+            assertThat(gmmActual).exists();
 
             JsonElement expected = JsonParser.parseReader(new FileReader(gmmExpected));
             JsonElement actual = JsonParser.parseReader(new FileReader(gmmActual));
-            assertEquals(expected, actual);
+            assertThat(expected).isEqualTo(actual);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

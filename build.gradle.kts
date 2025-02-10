@@ -53,6 +53,7 @@ testing.suites.named<JvmTestSuite>("test") {
     useJUnitJupiter()
     dependencies {
         implementation(gradleTestKit())
+        implementation("org.assertj:assertj-core:3.27.3")
     }
 }
 
