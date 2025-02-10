@@ -68,6 +68,12 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
             // publishing GMM for platforms is currently not supported, the BOM can be used as platform directly
             return;
         }
+        if (!project.getArtifact().getFile().isFile()) {
+            getLog().info("Skipping Gradle Metadata generation as the project artifact cannot be published: "
+                    + project.getArtifact().getFile());
+            return;
+        }
+
         assertMarkerCommentDefinedInPom();
         if (!outputDirectory.exists()) {
             //noinspection ResultOfMethodCallIgnored
@@ -94,7 +100,7 @@ public class GradleModuleMetadataMojo extends AbstractMojo {
     private void assertMarkerCommentDefinedInPom() {
         String marker = "do_not_remove: published-with-gradle-metadata";
         File pomFile = project.getFile();
-        try(Stream<String> lines = Files.lines(pomFile.toPath()))  {
+        try (Stream<String> lines = Files.lines(pomFile.toPath())) {
             if (lines.noneMatch(line -> line.contains(marker))) {
                 throw new RuntimeException("Please add the Gradle Module Metadata marker '<!-- " + marker + " -->' to " + pomFile.getAbsolutePath());
             }
