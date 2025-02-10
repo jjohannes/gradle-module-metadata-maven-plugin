@@ -67,7 +67,6 @@ class GMMMavenPluginTest {
         try {
             writeString(mavenProducerBuild.toPath(), """
                 <project>
-                  <!-- do_not_remove: published-with-gradle-metadata -->
                   <modelVersion>4.0.0</modelVersion>
                   <groupId>org.gradlex</groupId>
                   <artifactId>gradle-module-metadata-maven-plugin-integration-test</artifactId>
@@ -129,6 +128,13 @@ class GMMMavenPluginTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void marker_comment_is_added_to_pom() {
+        producerGMMPluginConfiguration("", "jar");
+        assertThat(mavenProducerBuild).content().contains(
+                "<modelVersion>4.0.0</modelVersion> <!-- do_not_remove: published-with-gradle-metadata -->");
     }
 
     @Test
